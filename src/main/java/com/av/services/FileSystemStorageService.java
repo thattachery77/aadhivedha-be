@@ -170,7 +170,7 @@ public class FileSystemStorageService implements StorageService {
 	  }
 
 	  @Override
-	  public void deleteAll() {
+	  public void deleteAll(String code,int mode) {
 	    FileSystemUtils.deleteRecursively(root.toFile());
 	  }
 
