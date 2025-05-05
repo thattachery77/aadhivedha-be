@@ -171,10 +171,9 @@ public class FileSystemStorageService implements StorageService {
 	  }
 
 	  @Override
-	  public boolean deleteAll(String code,int mode) {
-	       File directory = new File("uploads/"+code); // Replace with the actual path
+	  public boolean deleteAll(String code,int mode,String subfolder) {
   	       try {
-			deleteSubfolders(directory);
+			deleteSubfolders(mode==0 ? new File("uploads/"+code) : new File("uploads/"+code+"/"+subfolder));
 			return true;
 		} catch (Exception e) {
  		}

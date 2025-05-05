@@ -154,6 +154,7 @@ return null;
 		@GetMapping("/customer/code")
 		public ResponseEntity<String> getCustomerCode() {
 			int code  =  customerRepository.findFirstByOrderByCodeAsc().getCode()+1;
+			deleteAllFiles("AV_"+code,0,"");
 			return new ResponseEntity<>("AV_"+code, HttpStatus.OK);
 		}
 		
@@ -226,11 +227,7 @@ return null;
 	public ResponseEntity<Boolean> deleteAllFiles(@RequestParam("code") String code,
 			@RequestParam("mode") int mode,@RequestParam("subfolder") String subfolder) {
 		try {
-			if(mode==1) {
-			       File directory = new File("uploads/"+code+"/"+subfolder); // Replace with the actual path
-	 			   return new ResponseEntity<>(directory.delete(),HttpStatus.OK);
-			}
- 			return new ResponseEntity<>(storageService.deleteAll(code,mode),HttpStatus.OK);
+ 			return new ResponseEntity<>(storageService.deleteAll(code,mode,subfolder),HttpStatus.OK);
 		} catch (Exception e) {
 			return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
