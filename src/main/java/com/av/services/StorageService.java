@@ -32,7 +32,7 @@ public interface StorageService {
 	  
 	  public boolean delete(String code , String subfolder,String filename);
 
-	  public void deleteAll(String code , int mode);
+	  public boolean deleteAll(String code , int mode);
 
 	  public Stream<Path> loadAll();
 	  

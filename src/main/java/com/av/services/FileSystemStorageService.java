@@ -22,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.av.exception.StorageException;
 import com.av.exception.StorageFileNotFoundException;
+import java.io.File;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -170,10 +171,38 @@ public class FileSystemStorageService implements StorageService {
 	  }
 
 	  @Override
-	  public void deleteAll(String code,int mode) {
-	    FileSystemUtils.deleteRecursively(root.toFile());
+	  public boolean deleteAll(String code,int mode) {
+	       File directory = new File("uploads/"+code); // Replace with the actual path
+  	       try {
+			deleteSubfolders(directory);
+			return true;
+		} catch (Exception e) {
+ 		}
+  	       return false;
 	  }
+	  
+	  private void deleteSubfolders(File directory) {
+		  if (!directory.exists()) {
+	            System.out.println("Directory does not exist.");
+	            return;
+	        }
 
+	        if (!directory.isDirectory()) {
+	             System.out.println("Not a directory.");
+	            return;
+	        }
+
+	        File[] files = directory.listFiles();
+	        if (files != null) {
+	            for (File file : files) {
+	                if (file.isDirectory()) {
+	                    deleteSubfolders(file); // Recursive call for subdirectories
+	                }
+	                file.delete(); // Delete files and empty directories
+	            }
+	        }
+	        directory.delete(); // Delete the main directory after its contents are deleted
+	  }
 	  @Override
 	  public Stream<Path> loadAll() {
 	    try {

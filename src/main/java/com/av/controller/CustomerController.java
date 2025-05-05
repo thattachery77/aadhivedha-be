@@ -1,5 +1,6 @@
 package com.av.controller;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -217,6 +218,24 @@ return null;
 		}
 	}
 
+	
+	/**
+	 * @purpose : Delete customer by id.
+	 */
+	@DeleteMapping("/deleteAllFiles")
+	public ResponseEntity<Boolean> deleteAllFiles(@RequestParam("code") String code,
+			@RequestParam("mode") int mode,@RequestParam("subfolder") String subfolder) {
+		try {
+			if(mode==1) {
+			       File directory = new File("uploads/"+code+"/"+subfolder); // Replace with the actual path
+	 			   return new ResponseEntity<>(directory.delete(),HttpStatus.OK);
+			}
+ 			return new ResponseEntity<>(storageService.deleteAll(code,mode),HttpStatus.OK);
+		} catch (Exception e) {
+			return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+	}
+	
 	/*
 	 * @GetMapping("/files/{filename:.+}")
 	 * 
