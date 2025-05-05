@@ -67,7 +67,7 @@ public class CustomerController {
 	public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
 		try {
 			customerRepository.count();
-			customer.setCode(customerRepository.findFirstByOrderByCodeAsc().getCode()+1);
+			customer.setCode(customerRepository.findTopByOrderByCodeDesc().getCode()+1);
 			Customer _tutorial = customerRepository.save(customer);
 			return new ResponseEntity<>(_tutorial, HttpStatus.CREATED);
 		} catch (Exception e) {
@@ -153,7 +153,7 @@ return null;
 		 */
 		@GetMapping("/customer/code")
 		public ResponseEntity<String> getCustomerCode() {
-			int code  =  customerRepository.findFirstByOrderByCodeAsc().getCode()+1;
+			int code  =  customerRepository.findTopByOrderByCodeDesc().getCode()+1;
 			deleteAllFiles("AV_"+code,0,"");
 			return new ResponseEntity<>("AV_"+code, HttpStatus.OK);
 		}

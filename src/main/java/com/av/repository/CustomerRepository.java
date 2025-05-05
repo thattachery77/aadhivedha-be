@@ -15,5 +15,6 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 	
 	  // @Query("SELECT MAX(c.code) FROM Customer c")
 	  //  int findTopByNameOrderByTimestampDesc();
-	Customer findFirstByOrderByCodeAsc();
+	Customer findTopByOrderByCodeDesc();
+	 
 }
