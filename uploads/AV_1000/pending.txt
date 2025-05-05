@@ -1,0 +1,59 @@
+Pending 
+-------
+
+java
+
+ 
+java - OOPS implementation programatically
+ 
+What are the main concepts of OOPs in Java?
+java - OOPS implementation programatically
+
+access modifier and non access modifier
+string buffer and string builder
+Why is StringBuffer called mutable?
+
+difference between String / StringBuffer / StringReader 
+
+difference between Vector & ArrayList
+
+Detailed knowledge of Collection Framework
+	
+What is a thread?
+ 
+Differentiate between HashMap and HashTable
+
+
+stream api (both theory / practical )
+
+
+Checked exceptions vs Unchecked exceptions - practical
+
+Java 8 featuresv -> Functional interface / lambda expression / streams etc
+
+serialization vs deserialization
+
+
+Database 
+----------
+
+What is a view in SQL? How to create a view?
+What is a Trigger? 
+What is a stored procedure? 
+What is a transaction? 
+What are ACID properties? 
+Normalization and types
+What are indexes? 
+
+
+Springboot
+-----------
+ 
+What are the Features of Spring Boot?
+What are the Spring Boot Starter Dependencies?
+What is the difference between RequestMapping and GetMapping?
+What is the difference between Constructor and Setter Injection?
+IoC vs DI
+concept of auto-configuration in Spring Boot
+
+ 
