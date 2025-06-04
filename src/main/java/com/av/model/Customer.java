@@ -31,6 +31,7 @@ public class Customer {
 	    private Boolean approvalStatus;
 	    private Boolean active;
 	    
+	    private String tab;
 	    private Personal personal=  new Personal();
 	    private Project project =  new Project();
 	    
@@ -184,6 +185,14 @@ public class Customer {
 
 		public void setProject(Project project) {
 			this.project = project;
+		}
+
+		public String getTab() {
+			return tab;
+		}
+
+		public void setTab(String tab) {
+			this.tab = tab;
 		}
 	    
 	    
