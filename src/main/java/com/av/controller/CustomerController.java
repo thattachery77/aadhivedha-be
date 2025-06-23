@@ -1,6 +1,5 @@
 package com.av.controller;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -9,6 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -33,8 +34,11 @@ import com.av.exception.StorageFileNotFoundException;
 import com.av.model.Customer;
 import com.av.model.FileInfo;
 import com.av.repository.CustomerRepository;
+import com.av.services.Configuration;
 import com.av.services.FileSystemStorageService;
 import com.av.services.StorageService;
+
+
 
 @CrossOrigin(origins = "http://localhost:4200")
 // @CrossOrigin(origins = "https://switeco.com")
@@ -42,6 +46,9 @@ import com.av.services.StorageService;
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
+
+  private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
+
 
   private final FileSystemStorageService fileSystemStorageService;
 
@@ -64,15 +71,30 @@ public class CustomerController {
   @PostMapping("/customer")
   public ResponseEntity<Customer> createCustomer(@RequestBody Customer customer) {
     try {
-      customerRepository.count();
-      customer.setCode(customerRepository.findTopByOrderByCodeDesc().getCode() + 1);
-      return new ResponseEntity<>(customerRepository.save(setCustomerTab(customer)),
-          HttpStatus.CREATED);
+      // customerRepository.count();
+      // customer.setCode(customerRepository.findTopByOrderByCodeDesc().getCode() + 1);
+      Customer existingCustomer = customerRepository.findByCode(customer.getCode());
+      if (existingCustomer != null) {// customer already exists for other Tab, so update.
+        return new ResponseEntity<>(updateCustomer(existingCustomer, customer), HttpStatus.CREATED);
+      } else {
+        return new ResponseEntity<>(customerRepository.save(setCustomerTab(customer)),
+            HttpStatus.CREATED);
+      }
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
-  
+
+  private Customer updateCustomer(Customer existingCustomer, Customer newCustomer) {
+    if (newCustomer.getTab().equals(Configuration.PER_TAB)) { // save personal
+      existingCustomer.setPersonal(newCustomer.getPersonal());
+    } else if (newCustomer.getTab().equals(Configuration.PROJ_TAB)) { // save personal
+      existingCustomer.setProject(newCustomer.getProject());
+    }
+    customerRepository.save(existingCustomer);
+    return existingCustomer;
+  }
+
   /**
    * @purpose : set profile photo.
    */
@@ -81,14 +103,15 @@ public class CustomerController {
   public ResponseEntity<Boolean> setProfileImage(@RequestParam("code") String code,
       @RequestParam("tab") String tab, @RequestParam("filename") String fileName) {
     try {
-         Files.copy(Paths.get("uploads/"+code+"/"+tab+"/"+fileName), Paths.get("uploads/"+code+"/"+tab+"/MY_PROFILE.jpg"), 
-           StandardCopyOption.REPLACE_EXISTING);
+      Files.copy(Paths.get("uploads/" + code + "/" + tab + "/" + fileName),
+          Paths.get("uploads/" + code + "/" + tab + "/MY_PROFILE.jpg"),
+          StandardCopyOption.REPLACE_EXISTING);
 
       return new ResponseEntity<>(true, HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
     }
- 
+
   }
 
   /**
@@ -97,16 +120,12 @@ public class CustomerController {
   private Customer setCustomerTab(Customer _customer) {
     Customer customer = new Customer();
     customer.setCode(_customer.getCode());
-    if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.PER_TAB)) {// save
-                                                                                     // personal
-                                                                                     // data
+    if (_customer.getAction().equals(Configuration.SAVE_ALL)) {
+      return _customer; // save all data
+    } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.PER_TAB)) {// save
       customer.setPersonal(_customer.getPersonal());
     } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.PROJ_TAB)) {// save
-                                                                                             // project
-                                                                                             // data
       customer.setProject(_customer.getProject());
-    } else { // save all data
-      return _customer;
     }
     return customer;
   }
@@ -116,6 +135,12 @@ public class CustomerController {
    */
   @GetMapping("/customers")
   public ResponseEntity<List<Customer>> getAllCustomers() {
+
+    logger.trace("TRACE log");
+    logger.debug("DEBUG log");
+    logger.info("INFO log");
+    logger.warn("WARN log");
+    logger.error("ERROR log");
 
     try {
       List<Customer> customers = new ArrayList<Customer>();
@@ -153,12 +178,21 @@ public class CustomerController {
           e.printStackTrace();
         }
         return null;
-      }).collect(Collectors.toList());
+      }
+
+      ).collect(Collectors.toList());
     } catch (Exception e) {
       // e.printStackTrace();
     }
 
-    return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
+    List<FileInfo> fileInfosNew = new ArrayList<>();
+
+    for (FileInfo fileInfo : fileInfos) {
+      if (!fileInfo.getName().contains("MY_PROFILE")) {
+        fileInfosNew.add(fileInfo);
+      }
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(fileInfosNew);
   }
 
 
@@ -249,10 +283,11 @@ public class CustomerController {
     Optional<Customer> customerData = customerRepository.findById(id);
     if (customerData.isPresent()) {
       Customer _customer = customerData.get();
-      _customer.setName(customer.getName());
-      _customer.setAadharno(customer.getAadharno());
-      _customer.setNameofproject(customer.getNameofproject());
-      _customer.setDescription(customer.getDescription());
+      // _customer.setName(customer.getName());
+      /*
+       * _customer.setAadharno(customer.getAadharno());
+       * _customer.setNameofproject(customer.getNameofproject());
+       */ _customer.setDescription(customer.getDescription());
       return new ResponseEntity<>(customerRepository.save(customer), HttpStatus.OK);
     } else {
       return new ResponseEntity<>(HttpStatus.NOT_FOUND);

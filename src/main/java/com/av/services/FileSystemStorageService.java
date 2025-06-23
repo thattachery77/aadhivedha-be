@@ -5,10 +5,12 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.SimpleFileVisitor;
 import java.nio.file.StandardCopyOption;
 import java.util.stream.Stream;
 
@@ -23,6 +25,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.av.exception.StorageException;
 import com.av.exception.StorageFileNotFoundException;
 import java.io.File;
+import java.nio.file.attribute.BasicFileAttributes;
 
 @Service
 public class FileSystemStorageService implements StorageService {
@@ -172,12 +175,39 @@ public class FileSystemStorageService implements StorageService {
 
 	  @Override
 	  public boolean deleteAll(String code,int mode,String subfolder) {
-  	       try {
-			deleteSubfolders(mode==0 ? new File("uploads/"+code) : new File("uploads/"+code+"/"+subfolder));
-			return true;
-		} catch (Exception e) {
- 		}
-  	       return false;
+        /*
+         * try { deleteSubfolders(mode==0 ? new File("uploads/"+code) : new
+         * File("uploads/"+code+"/"+subfolder)); return true; } catch (Exception e) { } return
+         * false;
+         */
+	    Path parentDir = Paths.get("uploads/"+code);
+	    
+	    if (!Files.isDirectory(parentDir)) {
+          throw new IllegalArgumentException("Provided path is not a directory: " + parentDir);
+      }
+
+      try {
+        Files.walkFileTree(parentDir, new SimpleFileVisitor<Path>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                Files.delete(file); // delete file
+                return FileVisitResult.CONTINUE;
+            }
+
+            @Override
+            public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
+                if (!dir.equals(parentDir)) {
+                    Files.delete(dir); // delete subdirectory after its contents
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+        return true;
+      } catch (IOException e) {
+        // TODO Auto-generated catch block
+        e.printStackTrace();
+      }
+      return false;
 	  }
 	  
 	  private void deleteSubfolders(File directory) {
