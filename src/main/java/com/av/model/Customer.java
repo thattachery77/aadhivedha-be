@@ -23,8 +23,8 @@ public class Customer {
 
   private Personal personal = new Personal();
   private Project project = new Project();
-  private BankDetail bankDetails = new BankDetail();
-
+  private BankDetail bankdetail = new BankDetail();
+  private Udyam udyam = new Udyam();
 
   public Customer() {
 
@@ -120,12 +120,15 @@ public class Customer {
     this.tab = tab;
   }
 
-  public BankDetail getBankDetails() {
-    return bankDetails;
+
+
+  public BankDetail getBankdetail() {
+    return bankdetail;
   }
 
-  public void setBankDetails(BankDetail bankDetails) {
-    this.bankDetails = bankDetails;
+
+  public void setBankdetail(BankDetail bankdetail) {
+    this.bankdetail = bankdetail;
   }
 
 
@@ -136,6 +139,16 @@ public class Customer {
 
   public void setAction(String action) {
     this.action = action;
+  }
+
+
+  public Udyam getUdyam() {
+    return udyam;
+  }
+
+
+  public void setUdyam(Udyam udyam) {
+    this.udyam = udyam;
   }
 
 

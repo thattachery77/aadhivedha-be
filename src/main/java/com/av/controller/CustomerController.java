@@ -90,6 +90,10 @@ public class CustomerController {
       existingCustomer.setPersonal(newCustomer.getPersonal());
     } else if (newCustomer.getTab().equals(Configuration.PROJ_TAB)) { // save personal
       existingCustomer.setProject(newCustomer.getProject());
+    } else if (newCustomer.getTab().equals(Configuration.UDYAM_TAB)) { // save personal
+      existingCustomer.setUdyam(newCustomer.getUdyam());
+    } else if (newCustomer.getTab().equals(Configuration.BANK_TAB)) { // save bank
+      existingCustomer.setBankdetail(newCustomer.getBankdetail());
     }
     customerRepository.save(existingCustomer);
     return existingCustomer;
@@ -126,6 +130,10 @@ public class CustomerController {
       customer.setPersonal(_customer.getPersonal());
     } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.PROJ_TAB)) {// save
       customer.setProject(_customer.getProject());
+    } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.UDYAM_TAB)) {// save
+      customer.setUdyam(_customer.getUdyam());
+    } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.BANK_TAB)) {// save
+      customer.setBankdetail(_customer.getBankdetail());
     }
     return customer;
   }
