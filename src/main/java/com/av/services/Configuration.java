@@ -8,4 +8,6 @@ public interface Configuration {
   String UDYAM_TAB = "Udyam Registration";
   String BANK_TAB = "Bank Account Details";
   String SAVE_ALL = "SAVE_ALL";
+  String KL = "KL";
+
 }

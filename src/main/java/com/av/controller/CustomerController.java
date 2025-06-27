@@ -11,6 +11,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -32,11 +33,16 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.MvcUriComponentsBuilder;
 import com.av.exception.StorageFileNotFoundException;
 import com.av.model.Customer;
+import com.av.model.District;
 import com.av.model.FileInfo;
+import com.av.model.State;
+import com.av.model.SubDistrict;
 import com.av.repository.CustomerRepository;
+import com.av.repository.StateRepository;
 import com.av.services.Configuration;
 import com.av.services.FileSystemStorageService;
 import com.av.services.StorageService;
+import jakarta.annotation.PostConstruct;
 
 
 
@@ -55,7 +61,20 @@ public class CustomerController {
   @Autowired
   CustomerRepository customerRepository;
 
+  @Autowired
+  StateRepository stateRepository;
+
   private final StorageService storageService;
+  private static State state;
+
+  @PostConstruct
+  public void init() {
+    try {
+      state = stateRepository.findByStateCode(Configuration.KL);
+    } catch (Exception e) {
+      logger.error("Error initializing storage service: " + e.getMessage());
+    }
+  }
 
   @Autowired
   public CustomerController(StorageService storageService,
@@ -366,6 +385,55 @@ public class CustomerController {
     System.out.println("get files");
     return new ResponseEntity<>(HttpStatus.OK);
 
+  }
+
+  /**
+   * @purpose : Get all combo List values.x`
+   */
+  @Cacheable("districts")
+  @GetMapping("/disctricts")
+  public ResponseEntity<List<District>> getDistricts(@RequestParam("statecode") String stateCode) {
+    try {
+      return new ResponseEntity<>(state.getDistricts(), HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+
+  /**
+   * @purpose : Get all subdistricts by district name.`
+   */
+  @Cacheable("subdistricts")
+  @GetMapping("/subdisctricts")
+  public ResponseEntity<List<SubDistrict>> getSubDistricts(
+      @RequestParam("districtcode") String districtcode) {
+    try {
+      District districtObj = state.getDistricts().stream()
+          .filter(d -> d.getDistrict().equalsIgnoreCase(districtcode)).findFirst().orElse(null);
+      return new ResponseEntity<>(districtObj.getSubDistricts(), HttpStatus.OK);
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
+   * @purpose : Get all villege by district name.`
+   */
+  @Cacheable("villeges")
+  @GetMapping("/villeges")
+  public ResponseEntity<List<String>> getVilleges(@RequestParam("district") String district,
+      @RequestParam("subdistrict") String subdistrict) {
+    try {
+      District districtObj = state.getDistricts().stream()
+          .filter(d -> d.getDistrict().equalsIgnoreCase(district)).findFirst().orElse(null);
+      SubDistrict subDistrictObj = districtObj.getSubDistricts().stream()
+          .filter(sd -> sd.getSubDistrict().equalsIgnoreCase(subdistrict)).findFirst().orElse(null);
+      return new ResponseEntity<>(subDistrictObj.getVillages(), HttpStatus.OK);
+
+    } catch (Exception e) {
+      return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
   }
 
   /*
