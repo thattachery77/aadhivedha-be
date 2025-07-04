@@ -25,6 +25,8 @@ public class Customer {
   private Project project = new Project();
   private BankDetail bankdetail = new BankDetail();
   private Udyam udyam = new Udyam();
+  private Pmegp pmegp = new Pmegp();
+  private KSwift kswift = new KSwift();
 
   public Customer() {
 
@@ -149,6 +151,26 @@ public class Customer {
 
   public void setUdyam(Udyam udyam) {
     this.udyam = udyam;
+  }
+
+
+  public Pmegp getPmegp() {
+    return pmegp;
+  }
+
+
+  public void setPmegp(Pmegp pmegp) {
+    this.pmegp = pmegp;
+  }
+
+
+  public KSwift getKswift() {
+    return kswift;
+  }
+
+
+  public void setKswift(KSwift kswift) {
+    this.kswift = kswift;
   }
 
 

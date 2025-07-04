@@ -143,7 +143,7 @@ public class CustomerController {
   private Customer setCustomerTab(Customer _customer) {
     Customer customer = new Customer();
     customer.setCode(_customer.getCode());
-    if (_customer.getAction().equals(Configuration.SAVE_ALL)) {
+    if (null != _customer.getAction() && _customer.getAction().equals(Configuration.SAVE_ALL)) {
       return _customer; // save all data
     } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.PER_TAB)) {// save
       customer.setPersonal(_customer.getPersonal());
@@ -151,6 +151,10 @@ public class CustomerController {
       customer.setProject(_customer.getProject());
     } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.UDYAM_TAB)) {// save
       customer.setUdyam(_customer.getUdyam());
+    } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.PMEGP_TAB)) {// save
+      customer.setPmegp(_customer.getPmegp());
+    } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.KSWIFT_TAB)) {// save
+      customer.setKswift(_customer.getKswift());
     } else if (_customer.getTab().equalsIgnoreCase(com.av.services.Configuration.BANK_TAB)) {// save
       customer.setBankdetail(_customer.getBankdetail());
     }
@@ -321,14 +325,16 @@ public class CustomerController {
     }
   }
 
-  /**
-   * @purpose : Delete customer by id.
-   */
-  @DeleteMapping("/customer/{id}")
-  public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable("id") String id) {
+  @DeleteMapping("/deleteCustomer")
+  public ResponseEntity<HttpStatus> deleteCustomerByCode(@RequestParam("code") int code) {
     try {
-      customerRepository.deleteById(id);
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+      Customer customer = customerRepository.findByCode(code);
+      if (customer != null) {
+        customerRepository.delete(customer);
+        return new ResponseEntity<>(HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+      }
     } catch (Exception e) {
       return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     }
