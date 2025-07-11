@@ -15,5 +15,8 @@ public interface CustomerRepository extends MongoRepository<Customer, String> {
 
   Customer findByCode(int code);
 
+  Customer findByCode(String code);
+
+
 
 }

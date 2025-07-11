@@ -1,0 +1,15 @@
+2025-06-12 10:56:12.771 [http-nio-8080-exec-4] INFO  c.av.controller.CustomerController - INFO log
+2025-06-12 10:56:13.456 [http-nio-8080-exec-4] WARN  c.av.controller.CustomerController - WARN log
+2025-06-12 10:56:13.457 [http-nio-8080-exec-4] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-12 11:44:52.658 [http-nio-8080-exec-9] INFO  c.av.controller.CustomerController - INFO log
+2025-06-12 11:44:52.685 [http-nio-8080-exec-9] WARN  c.av.controller.CustomerController - WARN log
+2025-06-12 11:44:52.685 [http-nio-8080-exec-9] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-12 12:17:42.350 [http-nio-8080-exec-6] INFO  c.av.controller.CustomerController - INFO log
+2025-06-12 12:17:42.359 [http-nio-8080-exec-6] WARN  c.av.controller.CustomerController - WARN log
+2025-06-12 12:17:42.361 [http-nio-8080-exec-6] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-12 13:10:04.348 [http-nio-8080-exec-7] INFO  c.av.controller.CustomerController - INFO log
+2025-06-12 13:10:04.371 [http-nio-8080-exec-7] WARN  c.av.controller.CustomerController - WARN log
+2025-06-12 13:10:04.373 [http-nio-8080-exec-7] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-12 13:57:54.705 [http-nio-8080-exec-8] INFO  c.av.controller.CustomerController - INFO log
+2025-06-12 13:57:54.710 [http-nio-8080-exec-8] WARN  c.av.controller.CustomerController - WARN log
+2025-06-12 13:57:54.711 [http-nio-8080-exec-8] ERROR c.av.controller.CustomerController - ERROR log

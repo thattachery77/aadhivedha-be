@@ -1,0 +1,80 @@
+2025-06-19 10:34:01.234 [http-nio-8080-exec-6] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 10:34:01.474 [http-nio-8080-exec-6] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 10:34:01.475 [http-nio-8080-exec-6] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 11:18:36.218 [main] INFO  c.a.SpringBootDataMongodbApplication - Starting SpringBootDataMongodbApplication using Java 17.0.14 with PID 29308 (D:\H\av-be\bin\main started by user in D:\H\av-be)
+2025-06-19 11:18:36.222 [main] INFO  c.a.SpringBootDataMongodbApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-19 11:18:37.108 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-06-19 11:18:37.196 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 78 ms. Found 2 MongoDB repository interfaces.
+2025-06-19 11:18:37.922 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-06-19 11:18:37.942 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-06-19 11:18:37.946 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-19 11:18:37.947 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-06-19 11:18:38.043 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-06-19 11:18:38.043 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1724 ms
+2025-06-19 11:18:38.360 [main] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Windows", "name": "Windows 11", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/17.0.14+8-LTS-191"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@3c9ef6e9, com.mongodb.Jep395RecordCodecProvider@3cdff901, com.mongodb.KotlinCodecProvider@57e5396b]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-06-19 11:18:38.386 [cluster-ClusterId{value='6853a4b60140ea3c1a0c8313', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=27877500, minRoundTripTimeNanos=0}
+2025-06-19 11:18:38.999 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [public/index.html]
+2025-06-19 11:18:39.579 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-06-19 11:18:39.644 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-06-19 11:18:39.668 [main] INFO  c.a.SpringBootDataMongodbApplication - Started SpringBootDataMongodbApplication in 4.242 seconds (process running for 5.545)
+2025-06-19 11:22:46.673 [http-nio-8080-exec-2] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-19 11:22:46.676 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-19 11:22:46.681 [http-nio-8080-exec-2] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 5 ms
+2025-06-19 11:22:46.775 [http-nio-8080-exec-2] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 11:22:46.776 [http-nio-8080-exec-2] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 11:22:46.776 [http-nio-8080-exec-2] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 11:22:50.226 [http-nio-8080-exec-4] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 11:22:50.226 [http-nio-8080-exec-4] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 11:22:50.226 [http-nio-8080-exec-4] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 11:24:54.625 [http-nio-8080-exec-5] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 11:24:54.625 [http-nio-8080-exec-5] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 11:24:54.625 [http-nio-8080-exec-5] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 11:27:38.624 [main] INFO  c.a.SpringBootDataMongodbApplication - Starting SpringBootDataMongodbApplication using Java 17.0.14 with PID 21592 (D:\H\av-be\bin\main started by user in D:\H\av-be)
+2025-06-19 11:27:38.628 [main] INFO  c.a.SpringBootDataMongodbApplication - No active profile set, falling back to 1 default profile: "default"
+2025-06-19 11:27:39.515 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Bootstrapping Spring Data MongoDB repositories in DEFAULT mode.
+2025-06-19 11:27:39.592 [main] INFO  o.s.d.r.c.RepositoryConfigurationDelegate - Finished Spring Data repository scanning in 67 ms. Found 2 MongoDB repository interfaces.
+2025-06-19 11:27:40.540 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat initialized with port 8080 (http)
+2025-06-19 11:27:40.555 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Initializing ProtocolHandler ["http-nio-8080"]
+2025-06-19 11:27:40.557 [main] INFO  o.a.catalina.core.StandardService - Starting service [Tomcat]
+2025-06-19 11:27:40.558 [main] INFO  o.a.catalina.core.StandardEngine - Starting Servlet engine: [Apache Tomcat/10.1.34]
+2025-06-19 11:27:40.625 [main] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring embedded WebApplicationContext
+2025-06-19 11:27:40.626 [main] INFO  o.s.b.w.s.c.ServletWebServerApplicationContext - Root WebApplicationContext: initialization completed in 1918 ms
+2025-06-19 11:27:40.952 [main] INFO  org.mongodb.driver.client - MongoClient with metadata {"driver": {"name": "mongo-java-driver|sync|spring-boot", "version": "5.2.1"}, "os": {"type": "Windows", "name": "Windows 11", "architecture": "amd64", "version": "10.0"}, "platform": "Java/Oracle Corporation/17.0.14+8-LTS-191"} created with settings MongoClientSettings{readPreference=primary, writeConcern=WriteConcern{w=null, wTimeout=null ms, journal=null}, retryWrites=true, retryReads=true, readConcern=ReadConcern{level=null}, credential=null, transportSettings=null, commandListeners=[], codecRegistry=ProvidersCodecRegistry{codecProviders=[ValueCodecProvider{}, BsonValueCodecProvider{}, DBRefCodecProvider{}, DBObjectCodecProvider{}, DocumentCodecProvider{}, CollectionCodecProvider{}, IterableCodecProvider{}, MapCodecProvider{}, GeoJsonCodecProvider{}, GridFSFileCodecProvider{}, Jsr310CodecProvider{}, JsonObjectCodecProvider{}, BsonCodecProvider{}, EnumCodecProvider{}, com.mongodb.client.model.mql.ExpressionCodecProvider@2f054f70, com.mongodb.Jep395RecordCodecProvider@6467ddc7, com.mongodb.KotlinCodecProvider@27b337bb]}, loggerSettings=LoggerSettings{maxDocumentLength=1000}, clusterSettings={hosts=[localhost:27017], srvServiceName=mongodb, mode=SINGLE, requiredClusterType=UNKNOWN, requiredReplicaSetName='null', serverSelector='null', clusterListeners='[]', serverSelectionTimeout='30000 ms', localThreshold='15 ms'}, socketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=0, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, heartbeatSocketSettings=SocketSettings{connectTimeoutMS=10000, readTimeoutMS=10000, receiveBufferSize=0, proxySettings=ProxySettings{host=null, port=null, username=null, password=null}}, connectionPoolSettings=ConnectionPoolSettings{maxSize=100, minSize=0, maxWaitTimeMS=120000, maxConnectionLifeTimeMS=0, maxConnectionIdleTimeMS=0, maintenanceInitialDelayMS=0, maintenanceFrequencyMS=60000, connectionPoolListeners=[], maxConnecting=2}, serverSettings=ServerSettings{heartbeatFrequencyMS=10000, minHeartbeatFrequencyMS=500, serverMonitoringMode=AUTO, serverListeners='[]', serverMonitorListeners='[]'}, sslSettings=SslSettings{enabled=false, invalidHostNameAllowed=false, context=null}, applicationName='null', compressorList=[], uuidRepresentation=JAVA_LEGACY, serverApi=null, autoEncryptionSettings=null, dnsClient=null, inetAddressResolver=null, contextProvider=null, timeoutMS=null}
+2025-06-19 11:27:40.988 [cluster-ClusterId{value='6853a6d4393a1f5c7c10f6eb', description='null'}-localhost:27017] INFO  org.mongodb.driver.cluster - Monitor thread successfully connected to server with description ServerDescription{address=localhost:27017, type=STANDALONE, cryptd=false, state=CONNECTED, ok=true, minWireVersion=0, maxWireVersion=25, maxDocumentSize=16777216, logicalSessionTimeoutMinutes=30, roundTripTimeNanos=41939000, minRoundTripTimeNanos=0}
+2025-06-19 11:27:41.522 [main] INFO  o.s.b.a.w.s.WelcomePageHandlerMapping - Adding welcome page: class path resource [public/index.html]
+2025-06-19 11:27:41.896 [main] INFO  o.a.coyote.http11.Http11NioProtocol - Starting ProtocolHandler ["http-nio-8080"]
+2025-06-19 11:27:41.943 [main] INFO  o.s.b.w.e.tomcat.TomcatWebServer - Tomcat started on port 8080 (http) with context path '/'
+2025-06-19 11:27:41.955 [main] INFO  c.a.SpringBootDataMongodbApplication - Started SpringBootDataMongodbApplication in 4.158 seconds (process running for 5.321)
+2025-06-19 11:27:53.053 [http-nio-8080-exec-5] INFO  o.a.c.c.C.[Tomcat].[localhost].[/] - Initializing Spring DispatcherServlet 'dispatcherServlet'
+2025-06-19 11:27:53.054 [http-nio-8080-exec-5] INFO  o.s.web.servlet.DispatcherServlet - Initializing Servlet 'dispatcherServlet'
+2025-06-19 11:27:53.057 [http-nio-8080-exec-5] INFO  o.s.web.servlet.DispatcherServlet - Completed initialization in 2 ms
+2025-06-19 11:29:24.077 [http-nio-8080-exec-7] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 11:29:24.078 [http-nio-8080-exec-7] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 11:29:24.078 [http-nio-8080-exec-7] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 11:44:49.495 [http-nio-8080-exec-8] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 11:44:49.540 [http-nio-8080-exec-8] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 11:44:49.542 [http-nio-8080-exec-8] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 11:47:05.529 [http-nio-8080-exec-2] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 11:47:05.530 [http-nio-8080-exec-2] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 11:47:05.530 [http-nio-8080-exec-2] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 12:01:31.464 [http-nio-8080-exec-6] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 12:01:31.465 [http-nio-8080-exec-6] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 12:01:31.465 [http-nio-8080-exec-6] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 12:26:58.065 [http-nio-8080-exec-6] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 12:26:58.087 [http-nio-8080-exec-6] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 12:26:58.088 [http-nio-8080-exec-6] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 13:02:04.234 [http-nio-8080-exec-5] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 13:02:04.258 [http-nio-8080-exec-5] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 13:02:04.259 [http-nio-8080-exec-5] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 13:08:40.934 [http-nio-8080-exec-1] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 13:08:40.940 [http-nio-8080-exec-1] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 13:08:40.941 [http-nio-8080-exec-1] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 13:11:06.192 [http-nio-8080-exec-7] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 13:11:06.194 [http-nio-8080-exec-7] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 13:11:06.194 [http-nio-8080-exec-7] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 13:53:39.164 [http-nio-8080-exec-4] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 13:53:39.166 [http-nio-8080-exec-4] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 13:53:39.167 [http-nio-8080-exec-4] ERROR c.av.controller.CustomerController - ERROR log
+2025-06-19 14:00:32.454 [http-nio-8080-exec-3] INFO  c.av.controller.CustomerController - INFO log
+2025-06-19 14:00:32.459 [http-nio-8080-exec-3] WARN  c.av.controller.CustomerController - WARN log
+2025-06-19 14:00:32.459 [http-nio-8080-exec-3] ERROR c.av.controller.CustomerController - ERROR log

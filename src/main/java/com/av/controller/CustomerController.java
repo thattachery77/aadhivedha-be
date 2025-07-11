@@ -107,10 +107,14 @@ public class CustomerController {
   private Customer updateCustomer(Customer existingCustomer, Customer newCustomer) {
     if (newCustomer.getTab().equals(Configuration.PER_TAB)) { // save personal
       existingCustomer.setPersonal(newCustomer.getPersonal());
-    } else if (newCustomer.getTab().equals(Configuration.PROJ_TAB)) { // save personal
+    } else if (newCustomer.getTab().equals(Configuration.PROJ_TAB)) { // save project
       existingCustomer.setProject(newCustomer.getProject());
-    } else if (newCustomer.getTab().equals(Configuration.UDYAM_TAB)) { // save personal
+    } else if (newCustomer.getTab().equals(Configuration.UDYAM_TAB)) { // save udya
       existingCustomer.setUdyam(newCustomer.getUdyam());
+    } else if (newCustomer.getTab().equals(Configuration.PMEGP_TAB)) { // save pmegp
+      existingCustomer.setPmegp(newCustomer.getPmegp());
+    } else if (newCustomer.getTab().equals(Configuration.KSWIFT_TAB)) { // save kswift
+      existingCustomer.setKswift(newCustomer.getKswift());
     } else if (newCustomer.getTab().equals(Configuration.BANK_TAB)) { // save bank
       existingCustomer.setBankdetail(newCustomer.getBankdetail());
     }
@@ -125,6 +129,7 @@ public class CustomerController {
   @PostMapping("/profile")
   public ResponseEntity<Boolean> setProfileImage(@RequestParam("code") String code,
       @RequestParam("tab") String tab, @RequestParam("filename") String fileName) {
+    code = code.contains("AV_") ? code : "AV_" + code;
     try {
       Files.copy(Paths.get("uploads/" + code + "/" + tab + "/" + fileName),
           Paths.get("uploads/" + code + "/" + tab + "/MY_PROFILE.jpg"),
@@ -191,9 +196,10 @@ public class CustomerController {
   public ResponseEntity<List<FileInfo>> getCustomerFiles(@RequestParam("code") String code,
       @RequestParam("subfolder") String subfolder) {
     System.out.println(code);
+    final String newCode = code.contains("AV_") ? code : "AV_" + code;;
     List<FileInfo> fileInfos = new ArrayList<>();
     try {
-      fileInfos = storageService.loadCustomerFiles(code, subfolder).map(path -> {
+      fileInfos = storageService.loadCustomerFiles(newCode, subfolder).map(path -> {
         String filename = path.getFileName().toString();
         String url = MvcUriComponentsBuilder
             .fromMethodName(CustomerController.class, "getFile", path.getFileName().toString())
@@ -201,7 +207,7 @@ public class CustomerController {
         byte[] bytes;
         try {
           bytes = Files.readAllBytes(
-              Paths.get("uploads/" + code + "/" + subfolder + "/" + path.getFileName()));
+              Paths.get("uploads/" + newCode + "/" + subfolder + "/" + path.getFileName()));
           return new FileInfo(filename, url, bytes, path.getFileName().toString());
 
         } catch (IOException e) {
@@ -219,9 +225,9 @@ public class CustomerController {
     List<FileInfo> fileInfosNew = new ArrayList<>();
 
     for (FileInfo fileInfo : fileInfos) {
-      if (!fileInfo.getName().contains("MY_PROFILE")) {
-        fileInfosNew.add(fileInfo);
-      }
+      // if (!fileInfo.getName().contains("MY_PROFILE")) {
+      fileInfosNew.add(fileInfo);
+      // }
     }
     return ResponseEntity.status(HttpStatus.OK).body(fileInfosNew);
   }
@@ -246,7 +252,8 @@ public class CustomerController {
       @RequestParam("tab") String tab, @RequestParam("file") MultipartFile file) {
     String message = "";
     try {
-      storageService.save(file, code + "/" + tab);
+      // storageService.save(file, code.contains("AV_") ? code : "AV_" + code + "/" + tab);
+      storageService.save(file, code.contains("AV_") ? code + "/" + tab : "AV_" + code + "/" + tab);
       message = "Uploaded the file successfully: " + file.getOriginalFilename();
       return ResponseEntity.status(HttpStatus.OK).body(message);
     } catch (Exception e) {
@@ -294,15 +301,9 @@ public class CustomerController {
   /**
    * @purpose : get customer details by customer id.
    */
-  @GetMapping("/tutorials/{id}")
-  public ResponseEntity<Customer> getCustomerById(@PathVariable("id") String id) {
-    Optional<Customer> customer = customerRepository.findById(id);
-
-    // if (tutorialData.isPresent()) {
-    return new ResponseEntity<>(customer.get(), HttpStatus.OK);
-    /*
-     * } else { return new ResponseEntity<>(HttpStatus.NOT_FOUND); }
-     */
+  @GetMapping("/customerview")
+  public ResponseEntity<Customer> getCustomerByCode(@RequestParam("code") int code) {
+    return new ResponseEntity<>(customerRepository.findByCode(code), HttpStatus.OK);
   }
 
   /**
@@ -348,6 +349,7 @@ public class CustomerController {
   @DeleteMapping("/deleteCustomerFile")
   public ResponseEntity<HttpStatus> deleteCustomerFile(@RequestParam("code") String code,
       @RequestParam("subfolder") String subfolder, @RequestParam("filename") String filename) {
+    code = code.contains("AV_") ? code : "AV_" + code;
     try {
       storageService.delete(code, subfolder, filename);
       return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -363,6 +365,7 @@ public class CustomerController {
   @DeleteMapping("/deleteAllFiles")
   public ResponseEntity<Boolean> deleteAllFiles(@RequestParam("code") String code,
       @RequestParam("mode") int mode, @RequestParam("subfolder") String subfolder) {
+    code = code.contains("AV_") ? code : "AV_" + code;
     try {
       return new ResponseEntity<>(storageService.deleteAll(code, mode, subfolder), HttpStatus.OK);
     } catch (Exception e) {
