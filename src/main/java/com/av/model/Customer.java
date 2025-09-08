@@ -1,6 +1,7 @@
 package com.av.model;
 
 import java.util.Date;
+import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -22,6 +23,10 @@ public class Customer {
   private String action;
 
   private Personal personal = new Personal();
+  private List<Machinery> machinery = new java.util.ArrayList<>();
+  private List<WorkingCapitol> workingCapitol = new java.util.ArrayList<>();
+  private List<Sales> sales = new java.util.ArrayList<>();
+
   private Project project = new Project();
   private BankDetail bankdetail = new BankDetail();
   private Udyam udyam = new Udyam();
@@ -171,6 +176,36 @@ public class Customer {
 
   public void setKswift(KSwift kswift) {
     this.kswift = kswift;
+  }
+
+
+  public List<Machinery> getMachinery() {
+    return machinery;
+  }
+
+
+  public void setMachinery(List<Machinery> machinery) {
+    this.machinery = machinery;
+  }
+
+
+  public List<WorkingCapitol> getWorkingCapitol() {
+    return workingCapitol;
+  }
+
+
+  public void setWorkingCapitol(List<WorkingCapitol> workingCapitol) {
+    this.workingCapitol = workingCapitol;
+  }
+
+
+  public List<Sales> getSales() {
+    return sales;
+  }
+
+
+  public void setSales(List<Sales> sales) {
+    this.sales = sales;
   }
 
 

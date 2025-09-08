@@ -35,8 +35,11 @@ import com.av.exception.StorageFileNotFoundException;
 import com.av.model.Customer;
 import com.av.model.District;
 import com.av.model.FileInfo;
+import com.av.model.Machinery;
+import com.av.model.Sales;
 import com.av.model.State;
 import com.av.model.SubDistrict;
+import com.av.model.WorkingCapitol;
 import com.av.repository.CustomerRepository;
 import com.av.repository.StateRepository;
 import com.av.services.Configuration;
@@ -94,6 +97,9 @@ public class CustomerController {
       // customer.setCode(customerRepository.findTopByOrderByCodeDesc().getCode() + 1);
       Customer existingCustomer = customerRepository.findByCode(customer.getCode());
       if (existingCustomer != null) {// customer already exists for other Tab, so update.
+        if (null != customer.getAction() && customer.getAction().equals(Configuration.UPDATE)) {
+          return new ResponseEntity<>(customerRepository.save(customer), HttpStatus.CREATED);
+        }
         return new ResponseEntity<>(updateCustomer(existingCustomer, customer), HttpStatus.CREATED);
       } else {
         return new ResponseEntity<>(customerRepository.save(setCustomerTab(customer)),
@@ -264,6 +270,30 @@ public class CustomerController {
   }
 
 
+  @PostMapping(value = "/upload-folder", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+  public ResponseEntity<String> handleFolderUpload(@RequestParam("code") String code,
+      @RequestParam("tab") String tab, @RequestParam("files") MultipartFile[] files) {
+    String message = "";
+
+    try {
+      for (MultipartFile file : files) {
+        /*
+         * String relativePath = file.getOriginalFilename(); // contains sub-folder path Path
+         * targetPath = Paths.get("uploads").resolve(relativePath).normalize();
+         * Files.createDirectories(targetPath.getParent()); Files.copy(file.getInputStream(),
+         * targetPath, StandardCopyOption.REPLACE_EXISTING);
+         */
+        storageService.saveFolder(file,
+            code.contains("AV_") ? code + "/" + tab : "AV_" + code + "/" + tab);
+      }
+      message = "Uploaded the file(s) successfully: ";
+      return ResponseEntity.status(HttpStatus.OK).body(message);
+    } catch (Exception e) {
+      message = "Could not upload the files!   Error: " + e.getMessage();
+      return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+    }
+  }
+
   @GetMapping("/files/{filename:.+}")
   @ResponseBody
   public ResponseEntity<Resource> getFile(@PathVariable String filename) {
@@ -426,22 +456,310 @@ public class CustomerController {
     }
   }
 
-  /**
-   * @purpose : Get all villege by district name.`
-   */
+  /*  *//**
+         * @purpose : Get all villege by district name.`
+         *//*
+            * @Cacheable("villeges")
+            * 
+            * @GetMapping("/villeges") public ResponseEntity<List<String>>
+            * getVilleges(@RequestParam("district") String district,
+            * 
+            * @RequestParam("subdistrict") String subdistrict) { try { District districtObj =
+            * state.getDistricts().stream() .filter(d ->
+            * d.getDistrict().equalsIgnoreCase(district)).findFirst().orElse(null); SubDistrict
+            * subDistrictObj = districtObj.getSubDistricts().stream() .filter(sd ->
+            * sd.getSubDistrict().equalsIgnoreCase(subdistrict)).findFirst().orElse(null); return
+            * new ResponseEntity<>(subDistrictObj.getVillages(), HttpStatus.OK);
+            * 
+            * } catch (Exception e) { return new ResponseEntity<>(null,
+            * HttpStatus.INTERNAL_SERVER_ERROR); } }
+            */
+
   @Cacheable("villeges")
   @GetMapping("/villeges")
-  public ResponseEntity<List<String>> getVilleges(@RequestParam("district") String district,
-      @RequestParam("subdistrict") String subdistrict) {
+  public ResponseEntity<List<String>> getVillages(@RequestParam("district") String district) {
     try {
       District districtObj = state.getDistricts().stream()
           .filter(d -> d.getDistrict().equalsIgnoreCase(district)).findFirst().orElse(null);
-      SubDistrict subDistrictObj = districtObj.getSubDistricts().stream()
-          .filter(sd -> sd.getSubDistrict().equalsIgnoreCase(subdistrict)).findFirst().orElse(null);
-      return new ResponseEntity<>(subDistrictObj.getVillages(), HttpStatus.OK);
 
+      if (districtObj != null) {
+        // Aggregate all villages from all subdistricts
+        List<String> villages = districtObj.getSubDistricts().stream()
+            .flatMap(subDistrict -> subDistrict.getVillages().stream())
+            .collect(Collectors.toList());
+        return new ResponseEntity<>(villages, HttpStatus.OK);
+      }
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // District not found
     } catch (Exception e) {
       return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+  }
+
+  /**
+   * @purpose : Check for duplicate machinery.
+   */
+  @GetMapping("/isDuplicateMachinery")
+  public ResponseEntity<String> checkDuplicateMachinery(@RequestParam("code") String code,
+      @RequestParam("particular") String particular) {
+    int customerCode = Integer.parseInt(code.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(customerCode);
+    if (customer != null) {
+      boolean isDuplicate = customer.getMachinery().stream()
+          .anyMatch(machinery -> machinery.getParticular().equalsIgnoreCase(particular));
+      if (isDuplicate) {
+        return ResponseEntity.ok("YES");
+      } else {
+        return ResponseEntity.ok("NO");
+      }
+    }
+    return ResponseEntity.ok("NO");
+  }
+
+
+
+  /**
+   * @purpose : Check for duplicate machinery.
+   */
+  @GetMapping("/isDuplicateWC")
+  public ResponseEntity<String> checkDuplicateWC(@RequestParam("code") String code,
+      @RequestParam("particular") String particular) {
+    int customerCode = Integer.parseInt(code.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(customerCode);
+    if (customer != null) {
+      boolean isDuplicate = customer.getWorkingCapitol().stream()
+          .anyMatch(wc -> wc.getParticular().equalsIgnoreCase(particular));
+      if (isDuplicate) {
+        return ResponseEntity.ok("YES");
+      } else {
+        return ResponseEntity.ok("NO");
+      }
+    }
+    return ResponseEntity.ok("NO");
+  }
+
+
+  /**
+   * @purpose : Check for duplicate sales.
+   */
+  @GetMapping("/isDuplicateSales")
+  public ResponseEntity<String> checkDuplicateSales(@RequestParam("code") String code,
+      @RequestParam("particular") String particular) {
+    int customerCode = Integer.parseInt(code.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(customerCode);
+    if (customer != null) {
+      boolean isDuplicate = customer.getSales().stream()
+          .anyMatch(sales -> sales.getParticular().equalsIgnoreCase(particular));
+      if (isDuplicate) {
+        return ResponseEntity.ok("YES");
+      } else {
+        return ResponseEntity.ok("NO");
+      }
+    }
+    return ResponseEntity.ok("NO");
+  }
+
+  /**
+   * @purpose : Save Machinery details.
+   */
+  @PostMapping("/machinery")
+  public ResponseEntity<Machinery> saveMachinery(@RequestParam("customerCode") String customerCode,
+      @RequestBody Machinery machinery) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {// customer already exists for other Tab, so update.
+      customer.getMachinery().add(machinery);
+      customerRepository.save(customer);
+      return new ResponseEntity<>(machinery, HttpStatus.CREATED);
+    } else {
+      customer = new Customer();
+      customer.setCode(code);
+      customer.getMachinery().add(machinery);
+      customerRepository.save(customer);
+      return new ResponseEntity<>(machinery, HttpStatus.CREATED);
+    }
+  }
+
+  @PostMapping("/workingcapitol")
+  public ResponseEntity<WorkingCapitol> saveWC(@RequestParam("customerCode") String customerCode,
+      @RequestBody WorkingCapitol wc) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {// customer already exists for other Tab, so update.
+      customer.getWorkingCapitol().add(wc);
+      customerRepository.save(customer);
+      return new ResponseEntity<>(wc, HttpStatus.CREATED);
+    } else {
+      customer = new Customer();
+      customer.setCode(code);
+      customer.getWorkingCapitol().add(wc);
+      customerRepository.save(customer);
+      return new ResponseEntity<>(wc, HttpStatus.CREATED);
+    }
+  }
+
+  @PostMapping("/sales")
+  public ResponseEntity<Sales> saveSales(@RequestParam("customerCode") String customerCode,
+      @RequestBody Sales sales) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {// customer already exists for other Tab, so update.
+      customer.getSales().add(sales);
+      customerRepository.save(customer);
+      return new ResponseEntity<>(sales, HttpStatus.CREATED);
+    } else {
+      customer = new Customer();
+      customer.setCode(code);
+      customer.getSales().add(sales);
+      customerRepository.save(customer);
+      return new ResponseEntity<>(sales, HttpStatus.CREATED);
+    }
+  }
+
+  @PostMapping("/editmachinery")
+  public ResponseEntity<Machinery> editMachinery(@RequestParam("customerCode") String customerCode,
+      @RequestBody Machinery updatedMachinery) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {
+      List<Machinery> machineryList = customer.getMachinery();
+      Machinery existingMachinery = machineryList.stream()
+          .filter(m -> m.getParticular().equalsIgnoreCase(updatedMachinery.getParticular()))
+          .findFirst().orElse(null);
+
+      if (existingMachinery != null) {
+        // Update the existing machinery with new details
+        existingMachinery.setRate(updatedMachinery.getRate());
+        existingMachinery.setQty(updatedMachinery.getQty());
+        existingMachinery.setAmount(updatedMachinery.getAmount());
+        // Add other fields as necessary
+        customerRepository.save(customer);
+        return new ResponseEntity<>(existingMachinery, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Machinery not found
+      }
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Customer not found
+    }
+  }
+
+  @PostMapping("/editworkingcapitol")
+  public ResponseEntity<WorkingCapitol> editWC(@RequestParam("customerCode") String customerCode,
+      @RequestBody WorkingCapitol updatedWC) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {
+      List<WorkingCapitol> wcList = customer.getWorkingCapitol();
+      WorkingCapitol existingWC =
+          wcList.stream().filter(m -> m.getParticular().equalsIgnoreCase(updatedWC.getParticular()))
+              .findFirst().orElse(null);
+
+      if (existingWC != null) {
+        // Update the existing machinery with new details
+        existingWC.setBoxrate(updatedWC.getBoxrate());
+        existingWC.setQty(updatedWC.getQty());
+        existingWC.setAmount(updatedWC.getAmount());
+        existingWC.setPcsrate(updatedWC.getPcsrate());
+        customerRepository.save(customer);
+        return new ResponseEntity<>(existingWC, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Machinery not found
+      }
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Customer not found
+    }
+  }
+
+  @PostMapping("/editsales")
+  public ResponseEntity<Sales> editSales(@RequestParam("customerCode") String customerCode,
+      @RequestBody Machinery updatedSales) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {
+      List<Sales> salesList = customer.getSales();
+      Sales existingSale = salesList.stream()
+          .filter(m -> m.getParticular().equalsIgnoreCase(updatedSales.getParticular())).findFirst()
+          .orElse(null);
+
+      if (existingSale != null) {
+        // Update the existing machinery with new details
+        existingSale.setRate(updatedSales.getRate());
+        existingSale.setQty(updatedSales.getQty());
+        existingSale.setAmount(updatedSales.getAmount());
+        // Add other fields as necessary
+        customerRepository.save(customer);
+        return new ResponseEntity<>(existingSale, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Machinery not found
+      }
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Customer not found
+    }
+  }
+
+
+  @PostMapping("/deletemachinery")
+  public ResponseEntity<Machinery> deleteMachinery(
+      @RequestParam("customerCode") String customerCode, @RequestBody Machinery machinery) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {
+      List<Machinery> machineryList = customer.getMachinery();
+      Machinery existingMachinery = machineryList.stream()
+          .filter(m -> m.getParticular().equalsIgnoreCase(machinery.getParticular())).findFirst()
+          .orElse(null);
+      machineryList.remove(existingMachinery);
+      if (existingMachinery != null) {
+        customerRepository.save(customer);
+        return new ResponseEntity<>(existingMachinery, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Machinery not found
+      }
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Customer not found
+    }
+  }
+
+  @PostMapping("/deleteworkingcapitol")
+  public ResponseEntity<WorkingCapitol> deleteWC(@RequestParam("customerCode") String customerCode,
+      @RequestBody WorkingCapitol wc) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {
+      List<WorkingCapitol> wcList = customer.getWorkingCapitol();
+      WorkingCapitol existingWC =
+          wcList.stream().filter(m -> m.getParticular().equalsIgnoreCase(wc.getParticular()))
+              .findFirst().orElse(null);
+      wcList.remove(existingWC);
+      if (existingWC != null) {
+        customerRepository.save(customer);
+        return new ResponseEntity<>(existingWC, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Machinery not found
+      }
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Customer not found
+    }
+  }
+
+  @PostMapping("/deletesales")
+  public ResponseEntity<Sales> deleteSales(@RequestParam("customerCode") String customerCode,
+      @RequestBody Sales sales) {
+    int code = Integer.parseInt(customerCode.replace("AV_", ""));
+    Customer customer = customerRepository.findByCode(code);
+    if (customer != null) {
+      List<Sales> salesList = customer.getSales();
+      Sales existingSale =
+          salesList.stream().filter(m -> m.getParticular().equalsIgnoreCase(sales.getParticular()))
+              .findFirst().orElse(null);
+      salesList.remove(existingSale);
+      if (existingSale != null) {
+        customerRepository.save(customer);
+        return new ResponseEntity<>(existingSale, HttpStatus.OK);
+      } else {
+        return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Machinery not found
+      }
+    } else {
+      return new ResponseEntity<>(HttpStatus.NOT_FOUND); // Customer not found
     }
   }
 
@@ -513,6 +831,7 @@ public class CustomerController {
 
 
   @ExceptionHandler(StorageFileNotFoundException.class)
+
   public ResponseEntity<?> handleStorageFileNotFound(StorageFileNotFoundException exc) {
     return ResponseEntity.notFound().build();
   }

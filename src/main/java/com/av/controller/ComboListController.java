@@ -13,20 +13,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import com.av.model.ComboList;
 import com.av.repository.ComboListRepository;
+import com.av.services.TalukService;
 
 @CrossOrigin(origins = "http://localhost:4200")
- 
+
 @RestController
 @RequestMapping("/api")
 public class ComboListController {
 
- 
+
   @Autowired
   ComboListRepository combolistRepository;
 
-  
+  @Autowired
+  TalukService talukService;
 
- 
+
   /**
    * @purpose : Get all combo List values.x`
    */
@@ -46,7 +48,11 @@ public class ComboListController {
     }
   }
 
+  @Cacheable("taluks")
+  @GetMapping("/taluks")
+  public List<String> getTaluksByDistrict(@RequestParam("district") String district) {
+    return talukService.getTaluksByDistrict(district);
+  }
 
 
-  
 }

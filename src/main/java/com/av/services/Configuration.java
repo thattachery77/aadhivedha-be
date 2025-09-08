@@ -13,5 +13,6 @@ public interface Configuration {
   String KL = "KL";
   String SUCCESS = "SUCCESS";
   String FAILURE = "FAILURE";
+  String UPDATE = "UPDATE";
 
 }

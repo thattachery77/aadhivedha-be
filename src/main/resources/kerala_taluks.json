@@ -1,0 +1,106 @@
+{
+  "Thiruvananthapuram": [
+    "Neyyattinkara",
+    "Kattakkada",
+    "Nedumangad",
+    "Thiruvananthapuram",
+    "Chirayinkeezhu",
+    "Varkala"
+  ],
+  "Kollam": [
+    "Kollam",
+    "Kottarakkara",
+    "Punalur",
+    "Pathanapuram",
+    "Karunagappally",
+    "Kunnathur"
+  ],
+  "Pathanamthitta": [
+    "Adoor",
+    "Konni",
+    "Kozhencherry",
+    "Ranni",
+    "Mallappally",
+    "Thiruvalla"
+  ],
+  "Alappuzha": [
+    "Cherthala",
+    "Ambalappuzha",
+    "Kuttanad",
+    "Karthikappally",
+    "Chengannur",
+    "Mavelikkara"
+  ],
+  "Kottayam": [
+    "Kottayam",
+    "Changanassery",
+    "Vaikom",
+    "Meenachil",
+    "Kanjirappally"
+  ],
+  "Idukki": [
+    "Idukki",
+    "Thodupuzha",
+    "Devikulam",
+    "Udumbanchola",
+    "Peerumedu"
+  ],
+  "Ernakulam": [
+    "Kanayannur",
+    "Kochi",
+    "North Paravur",
+    "Kunnathunad",
+    "Muvattupuzha",
+    "Kothamangalam",
+    "Aluva"
+  ],
+  "Thrissur": [
+    "Thrissur",
+    "Chavakkad",
+    "Kodungallur",
+    "Mukundapuram",
+    "Talappilly",
+    "Kunnamkulam"
+  ],
+  "Palakkad": [
+    "Palakkad",
+    "Chittur",
+    "Alathur",
+    "Ottapalam",
+    "Mannarkkad",
+    "Pattambi"
+  ],
+  "Malappuram": [
+    "Perinthalmanna",
+    "Ernad",
+    "Nilambur",
+    "Ponnani",
+    "Tirur",
+    "Tirurangadi",
+    "Kondotty"
+  ],
+  "Kozhikode": [
+    "Kozhikode",
+    "Koyilandy",
+    "Vadakara",
+    "Thamarassery"
+  ],
+  "Wayanad": [
+    "Vythiri",
+    "Sulthan Bathery",
+    "Mananthavady"
+  ],
+  "Kannur": [
+    "Thaliparamba",
+    "Kannur",
+    "Thalassery",
+    "Iritty",
+    "Payyannur"
+  ],
+  "Kasaragod": [
+    "Hosdurg",
+    "Vellarikundu",
+    "Kasaragod",
+    "Manjeshwaram"
+  ]
+}
