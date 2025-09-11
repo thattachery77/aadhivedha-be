@@ -31,6 +31,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok:1.18.28'
 	implementation 'org.springframework.boot:spring-boot-starter-web'
 	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.apache.poi:poi-ooxml:5.2.5'
+	
  	
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
