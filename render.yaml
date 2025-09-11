@@ -1,10 +1,7 @@
 services:
   - type: web
-    name: aadhivedha
-    env: java
+    name: spring-boot-angular-app
+    runtime: docker
     plan: free
-    buildCommand: chmod +x gradlew && ./gradlew clean build
-    startCommand: java -jar build/libs/adhivedha-1-0.0.1-SNAPSHOT.jar
-    envVars:
-      - key: JAVA_VERSION
-        value: 21.0.6
+    buildCommand: ""   # not needed because Dockerfile handles build
+    startCommand: ""   # also handled inside Dockerfile
