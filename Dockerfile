@@ -6,9 +6,15 @@ RUN npm install
 COPY frontend/ .
 RUN npm run build --prod
 
-FROM gradle:8.5-jdk21 AS backend-build
-WORKDIR /app
-COPY --chown=gradle:gradle . .
+
+FROM gradle:8.2.1-jdk17 as builder
+# or
+FROM openjdk:17-jdk-slim
+
+#FROM gradle:8.5-jdk21 AS backend-build
+#WORKDIR /app
+#COPY --chown=gradle:gradle . .
+
 # copy angular dist into static folder
 # RUN rm -rf src/main/resources/static/* && \
 #  cp -r frontend/dist/* src/main/resources/static/
