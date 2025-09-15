@@ -11,6 +11,11 @@ FROM gradle:8.2.1-jdk17 as builder
 # or
 FROM openjdk:17-jdk-slim
 
+
+FROM gradle:8.2.1-jdk17 AS backend-build
+WORKDIR /app
+COPY --chown=gradle:gradle . .
+
 #FROM gradle:8.5-jdk21 AS backend-build
 #WORKDIR /app
 #COPY --chown=gradle:gradle . .
