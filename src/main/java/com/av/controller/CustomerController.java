@@ -49,7 +49,8 @@ import jakarta.annotation.PostConstruct;
 
 
 
-@CrossOrigin(origins = "http://localhost:4200")
+// @CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
 // @CrossOrigin(origins = "https://switeco.com")
 
 @RestController
