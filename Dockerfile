@@ -10,8 +10,8 @@ FROM gradle:8.5-jdk21 AS backend-build
 WORKDIR /app
 COPY --chown=gradle:gradle . .
 # copy angular dist into static folder
-RUN rm -rf src/main/resources/static/* && \
-    cp -r frontend/dist/* src/main/resources/static/
+# RUN rm -rf src/main/resources/static/* && \
+#  cp -r frontend/dist/* src/main/resources/static/
 RUN 	chmod +x gradlew && ./gradlew clean build  --no-daemon
 
 # ---------- Stage 2: Runtime ----------
