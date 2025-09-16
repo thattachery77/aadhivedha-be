@@ -15,8 +15,8 @@ import com.av.services.Configuration;
 import com.av.services.UserService;
 
 
-
-@CrossOrigin(origins = "http://localhost:4200")
+@CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
+// @CrossOrigin(origins = "http://localhost:4200")
 // @CrossOrigin(origins = "https://switeco.com")
 @RestController
 @RequestMapping("/api/auth")
