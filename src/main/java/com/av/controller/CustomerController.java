@@ -17,6 +17,7 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -43,24 +44,24 @@ import com.av.model.WorkingCapitol;
 import com.av.repository.CustomerRepository;
 import com.av.repository.StateRepository;
 import com.av.services.Configuration;
+import com.av.services.FileStorageService;
 import com.av.services.FileSystemStorageService;
 import com.av.services.StorageService;
 import jakarta.annotation.PostConstruct;
 
-
-
-// @CrossOrigin(origins = "http://localhost:4200")
-@CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
-// @CrossOrigin(origins = "https://switeco.com")
+@CrossOrigin(origins = "http://localhost:4200")
+// @CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
 
 @RestController
 @RequestMapping("/api")
 public class CustomerController {
 
   private static final Logger logger = LoggerFactory.getLogger(CustomerController.class);
-
-
   private final FileSystemStorageService fileSystemStorageService;
+
+  @Autowired
+  private FileStorageService fileStorageService;
+
 
   @Autowired
   CustomerRepository customerRepository;
@@ -202,7 +203,6 @@ public class CustomerController {
   @GetMapping("/customerfiles")
   public ResponseEntity<List<FileInfo>> getCustomerFiles(@RequestParam("code") String code,
       @RequestParam("subfolder") String subfolder) {
-    System.out.println(code);
     final String newCode = code.contains("AV_") ? code : "AV_" + code;;
     List<FileInfo> fileInfos = new ArrayList<>();
     try {
@@ -216,27 +216,47 @@ public class CustomerController {
           bytes = Files.readAllBytes(
               Paths.get("uploads/" + newCode + "/" + subfolder + "/" + path.getFileName()));
           return new FileInfo(filename, url, bytes, path.getFileName().toString());
-
         } catch (IOException e) {
-          // TODO Auto-generated catch block
           e.printStackTrace();
         }
         return null;
-      }
-
-      ).collect(Collectors.toList());
+      }).collect(Collectors.toList());
     } catch (Exception e) {
-      // e.printStackTrace();
     }
-
     List<FileInfo> fileInfosNew = new ArrayList<>();
-
     for (FileInfo fileInfo : fileInfos) {
       // if (!fileInfo.getName().contains("MY_PROFILE")) {
       fileInfosNew.add(fileInfo);
       // }
     }
     return ResponseEntity.status(HttpStatus.OK).body(fileInfosNew);
+  }
+
+
+  // Get uplpoaded files from mongo db.
+  @GetMapping("/customerfiles-db")
+  public ResponseEntity<List<FileInfo>> getCustomerFiles(@RequestParam("code") String code) {
+    final String newCode = code.contains("AV_") ? code : "AV_" + code;;
+    Customer existingCustomer =
+        customerRepository.findByCode(Integer.parseInt(newCode.replace("AV_", "")));
+    List<FileInfo> fileInfos = new ArrayList<>();
+    if (existingCustomer != null) {
+      for (String fileName : existingCustomer.getPersonal().getFileIds()) {
+        try {
+          fileInfos.add(new FileInfo(fileName,
+              MvcUriComponentsBuilder.fromMethodName(CustomerController.class, "getFile", fileName)
+                  .build().toString(),
+              StreamUtils.copyToByteArray(
+                  fileStorageService.downloadFileByName(fileName).getInputStream()),
+              fileName));
+        } catch (IllegalStateException e) {
+          e.printStackTrace();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+    return ResponseEntity.status(HttpStatus.OK).body(fileInfos);
   }
 
 
@@ -270,23 +290,30 @@ public class CustomerController {
     }
   }
 
+  /*
+   * ORG
+   * 
+   * @PostMapping(value = "/upload-folder", consumes = MediaType.MULTIPART_FORM_DATA_VALUE) public
+   * ResponseEntity<String> handleFolderUpload(@RequestParam("code") String
+   * code, @RequestParam("tab") String tab, @RequestParam("files") MultipartFile[] files) { String
+   * message = ""; try { for (MultipartFile file : files) {
+   * storageService.saveFolder(file,code.contains("AV_") ? code + "/" + tab : "AV_" + code + "/" +
+   * tab); } message = "Uploaded the file(s) successfully: "; return
+   * ResponseEntity.status(HttpStatus.OK).body(message); } catch (Exception e) { message =
+   * "Could not upload the files!   Error: " + e.getMessage(); return
+   * ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message); } }
+   */
+
 
   @PostMapping(value = "/upload-folder", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
   public ResponseEntity<String> handleFolderUpload(@RequestParam("code") String code,
       @RequestParam("tab") String tab, @RequestParam("files") MultipartFile[] files) {
     String message = "";
-
+    String fileId = "";
+    List<String> fileIds = new ArrayList<>();
+    code = code.contains("AV_") ? code : "AV_" + code;
     try {
-      for (MultipartFile file : files) {
-        /*
-         * String relativePath = file.getOriginalFilename(); // contains sub-folder path Path
-         * targetPath = Paths.get("uploads").resolve(relativePath).normalize();
-         * Files.createDirectories(targetPath.getParent()); Files.copy(file.getInputStream(),
-         * targetPath, StandardCopyOption.REPLACE_EXISTING);
-         */
-        storageService.saveFolder(file,
-            code.contains("AV_") ? code + "/" + tab : "AV_" + code + "/" + tab);
-      }
+      fileId = fileStorageService.uploadFolder(code, files);
       message = "Uploaded the file(s) successfully: ";
       return ResponseEntity.status(HttpStatus.OK).body(message);
     } catch (Exception e) {

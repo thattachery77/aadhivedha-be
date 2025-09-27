@@ -29,8 +29,8 @@ import com.av.model.Sales;
 import com.av.model.WorkingCapitol;
 import com.av.repository.CustomerRepository;
 
-// @CrossOrigin(origins = "http://localhost:4200")
-@CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
+@CrossOrigin(origins = "http://localhost:4200")
+// @CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
 
 @RestController
 @RequestMapping("/api")

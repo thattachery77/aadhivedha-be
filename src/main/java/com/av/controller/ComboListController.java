@@ -15,7 +15,9 @@ import com.av.model.ComboList;
 import com.av.repository.ComboListRepository;
 import com.av.services.TalukService;
 
-@CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
+// @CrossOrigin(origins = "https://aadhivedha-be-10.onrender.com")
+@CrossOrigin(origins = "http://localhost:4200")
+
 @RestController
 @RequestMapping("/api")
 public class ComboListController {

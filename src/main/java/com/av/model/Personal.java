@@ -1,5 +1,8 @@
 package com.av.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Personal {
 
   private String name;
@@ -48,6 +51,7 @@ public class Personal {
   private String bankName;
   private String bankBranch;
   private int loanAmountRequired;
+  private List<String> fileIds = new ArrayList<>();
 
   public String getName() {
     return name;
@@ -368,6 +372,14 @@ public class Personal {
 
   public void setLoanAmountRequired(int loanAmountRequired) {
     this.loanAmountRequired = loanAmountRequired;
+  }
+
+  public List<String> getFileIds() {
+    return fileIds;
+  }
+
+  public void setFileIds(List<String> fileIds) {
+    this.fileIds = fileIds;
   }
 
 
