@@ -1,0 +1,34 @@
+{
+  
+    "required-msg": "This field is required.",
+    "firstName-required-msg": "mandatory",
+    "maxlength-msg": "%s character limit exceeded.",
+    "firstName-maxlength-msg": "%s character limit exceeded.",
+    "minlength-msg":"Must be %s numeric digits.",
+    "firstName-minlength-msg":"Must be %s numeric digits.",
+    "firstName-pattern-msg":"Accept only characters",
+    "contactNo-required-msg":"mandatory",
+     "contactNo-pattern-msg": "exactly 10 digits required",
+    "pincode-pattern-msg": "6 digits required",
+     "aadharNo-required-msg":"mandatory[12 digits]",
+     "aadharNo-pattern-msg": "exactly 12 digits required",
+     "panno-pattern-msg": "PAN format (e.g. ABCDE1234F)",
+     "nameofproject-required-msg": "mandatory",
+     "unitaddress-required-msg": "mandatory",
+     "loanschema-required-msg": "mandatory.",
+      
+     "loanschema-pattern-msg":"Accept only numbers",
+     "yearofloan-pattern-msg":"Accept only numbers"
+
+
+      
+
+
+      
+
+
+      
+
+     
+  }
+  
