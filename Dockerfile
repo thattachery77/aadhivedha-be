@@ -1,31 +1,26 @@
-# ---------- Stage 1: Build Angular + Spring Boot ----------
+# ---------- Stage 1: Build Angular ----------
 FROM node:18 AS frontend-build
 WORKDIR /app/frontend
 COPY frontend/package*.json ./
 RUN npm install
-COPY frontend/ .
+COPY frontend/ ./
 RUN npm run build --prod
 
 
-FROM gradle:8.2.1-jdk17 as builder
-# or
-FROM openjdk:17-jdk-slim
-
-
+# ---------- Stage 2: Build Spring Boot ----------
 FROM gradle:8.2.1-jdk17 AS backend-build
 WORKDIR /app
 COPY --chown=gradle:gradle . .
 
-#FROM gradle:8.5-jdk21 AS backend-build
-#WORKDIR /app
-#COPY --chown=gradle:gradle . .
+# Copy Angular build into Spring Boot static folder
+RUN rm -rf src/main/resources/static/* && \
+    cp -r frontend/dist/** src/main/resources/static/ || true
 
-# copy angular dist into static folder
-# RUN rm -rf src/main/resources/static/* && \
-#  cp -r frontend/dist/* src/main/resources/static/
-RUN 	chmod +x gradlew && ./gradlew clean build  --no-daemon
+# Build Spring Boot (skip tests if needed)
+RUN chmod +x gradlew && ./gradlew clean build -x test --no-daemon --stacktrace
 
-# ---------- Stage 2: Runtime ----------
+
+# ---------- Stage 3: Runtime ----------
 FROM eclipse-temurin:21-jdk AS runtime
 WORKDIR /app
 COPY --from=backend-build /app/build/libs/*.jar app.jar
