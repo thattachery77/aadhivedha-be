@@ -190,16 +190,13 @@ public class CustomerController {
 
   /**
    * @purpose : Delete customer by id.
+   * 
+   *          @DeleteMapping("/customer/{id}") public ResponseEntity<HttpStatus>
+   *          deleteCustomer(@PathVariable("id") String id) { try {
+   *          customerRepository.deleteById(id); return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+   *          } catch (Exception e) { return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+   *          } }
    */
-  @DeleteMapping("/customer/{id}")
-  public ResponseEntity<HttpStatus> deleteCustomer(@PathVariable("id") String id) {
-    try {
-      customerRepository.deleteById(id);
-      return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    } catch (Exception e) {
-      return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-  }
 
   /**
    * @purpose : Delete a customer by their ID.
